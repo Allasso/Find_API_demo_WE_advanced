@@ -1,1 +1,115 @@
-# Find_API_demo_WE_advanced
+/**********************
+ * DEMONSTRATION OF browser.find API
+ *
+ * ADVANCED DEMONSTRATION
+ *
+ * Demonstrates browser.find.find, browser.find.highlightResults, and
+ * browser.find.removeHighlighting.
+ *
+ * browser.find.find
+ *
+ * This will search for a phrase and store the results internally, which can then
+ *   be used later by browser.find.highlightResults.  Note that these results
+ *   persist until the next browser.find.search operation, and thus can be used
+ *   over again repeatedly by browser.find.highlightResults without running another
+ *   search, eg, to highlight different matches for the same search.
+ *
+ *   It will also (optionally) return the following:
+ *
+ *   `rangeData` from which can be extrapolated the DOM nodes wherein matches
+ *   were found.  Useful to extensions for finding surrounding text of the matches
+ *   which can give a summary display of results in context in a separate UI.
+ *   Demonstration of the use for this is found in content_script.js > collectTextSegments
+ *
+ *   `rectData` which provides cartesian coordinates of all the text matched in
+ *   the search, relative to the top-level document[1].  Useful to extensions for
+ *   providing custom highlighting of results.
+ *   Demonstration of the use for this is found in content_script.js > setCustomHighlighting
+ *   and content_script.js > setCustomHighlighting.
+ *
+ * browser.find.highlightResults
+ *
+ * This will use internal Find highlighting mechanism (nsISelectionController)
+ *   to highlight results found in previous browser.find.find.  Note that this
+ *   can be run independently of browser.find.find, as long as a search has
+ *   been made and there are results in the cache.  Note that because this uses
+ *   the native highlighting mechanism, its use may override Find operations
+ *   using the Findbar, and vice versa.
+ *
+ * browser.find.removeHighlighting
+ *
+ * This will use internal Find highlighting mechanism (nsISelectionController)
+ *   to remove all highlighting made by a previous highlight operation.
+ *
+ * This demo works as follows:
+ *
+ *   Upon clicking the browserAction button, a browser.find.find will be made,
+ *   and upon resolving, a highlighing operation will be performed, of which is
+ *   determined by HIGHLIGHTING_STYLE (See prefixed documentation for that).
+ *   After 3 seconds, any highlighting made by browser.find.highlight will be
+ *   cleared.
+ *
+ *   If `includeRangeData` is true, results will be displayed with surrounding
+ *   context in the browser console.
+ *
+ *   References to parameters for browser.find.find and browser.find.highlightResults
+ *   are set in global variables at the top of this script for convenience.
+ *
+ * [1] See caveats regarding custom highlighting in documentation for
+ *   setCustomHighlighting.
+ *
+ *
+ * NOTES ON HIGHLIGHTING DEMO:
+ *
+ * global HIGHLIGHTING_STYLE sets the highlighting style, using an integer
+ * value of 1, 2, 3 or 4.
+ *
+ * Note regarding terms:
+ *
+ * "Custom highlighting" refers to highlighting done by the user, which could be
+ *   applied using a content script (as in the case of this demo, content_script.js).
+ *
+ * browser.find.highlighting (the WebExtension API) uses the native internal Find
+ *   highlighting mechanism (nsISelectionController).
+ *
+ * Nevertheless, either or both can be use congruently.
+ *
+ * This attempts to demonstrate the different possibilities of highlighting.
+ *   These are just some examples; the user can implement highlighting options
+ *   in any combination which will achieve the desired effect.
+ *
+ *   HIGHLIGHTING STYLES:
+ *
+ *   1  Uses only browser.find.highlightResults.  Item at `rangeIndex`
+ *      will be highlighted, or if `rangeIndex` is null, all items will be highlighted.
+ *      This is the simplest and easiest to implement.
+ *
+ *   2  Uses only custom highlighting to draw rectangles around found text, red for
+ *      all matches, blue for match found at `rangeIndex`.
+ *      Code for this is found in content_script.js => setCustomHighlighting.
+ *
+ *   3  Uses only custom highlighting for "highlighter" style highlighting where
+ *      matches are overlayed with colored boxes containing the text, boxes are
+ *      colored yellow for all matches, green for match found at `rangeIndex`.
+ *      Code for this is found in content_script.js => setCustomHighlighting.
+ *
+ *   4  "FindBarTweak" style - uses both custom highlighting and browser.find.highlightResults.
+ *      Uses browser.find.highlightResults to highlight all results, then uses
+ *      custom highlighting to provide FBT "target" style animation over match
+ *      found at `rangeIndex`.
+ *      Code for the custom highlighting part of this is found in
+ *      content_script.js => findbarTweakStyleHighlighting.
+ *      Note this uses a very crude implementation of FBT's animated animated
+ *      highlighting, as it is just for demonstration purposes.
+ *
+ * **NOTE** FOR ANY CUSTOM HIGHLIGHTING IN THIS DEMO (2, 3 and 4), `includeRectData`
+ *          MUST BE TRUE, AND `rangeIndex` MUST HAVE A VALUE WITHIN RANGE.
+ *
+ * **NOTE** When using browser.find.highlightResults (1 and 4) a script in this
+ *   file will clear all highlighting after 3 seconds.  The delayed clearing is
+ *   only for purposes of demonstration of browser.find.removeHighlighting.
+ *   IRL, it would probably not be used this way.
+ *
+ * **NOTE** See caveats regarding custom highlighting in documentation for
+ *   setCustomHighlighting.
+ **********************/
