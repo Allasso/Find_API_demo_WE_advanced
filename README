@@ -3,6 +3,15 @@
  *
  * ADVANCED DEMONSTRATION
  *
+ * Files:
+ *  background.js
+ *  content_script.js
+ *  manifest.json
+ *  README
+ *  button_close_red_12.png
+ *
+ * (Warning - LOTS of documentation within the code)
+ *
  * Demonstrates browser.find.find, browser.find.highlightResults, and
  * browser.find.removeHighlighting.
  *
