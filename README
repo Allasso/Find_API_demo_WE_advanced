@@ -29,12 +29,13 @@
  *   were found.  Useful to extensions for finding surrounding text of the matches
  *   which can give a summary display of results in context in a separate UI.
  *   Demonstration of the use for this is found in content_script.js > collectTextSegments
+ *   where results will be displayed in context in the browser console.
  *
  *   `rectData` which provides cartesian coordinates of all the text matched in
  *   the search, relative to the top-level document[1].  Useful to extensions for
  *   providing custom highlighting of results.
  *   Demonstration of the use for this is found in content_script.js > setCustomHighlighting
- *   and content_script.js > setCustomHighlighting.
+ *   where highlighting effects will actually be seen on the page.
  *
  * browser.find.highlightResults
  *
